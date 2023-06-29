@@ -27,6 +27,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 # checking connection to server
 @bot.event
 async def on_ready():
+    global guild
     for guild in bot.guilds:
         if guild.name == GUILD:
             break
@@ -36,6 +37,9 @@ async def on_ready():
         f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
     )
+
+    for member in guild.members:
+        print(member.name)
 
 
 # reactions to messages
@@ -76,6 +80,8 @@ async def on_message(message):
             for i in range(15):
                 await message.channel.send(f"{mention} kurwa chodz")
                 sleep(0.5)
+
+
     await bot.process_commands(message)
 
 
