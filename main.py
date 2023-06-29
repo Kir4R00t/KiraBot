@@ -2,6 +2,7 @@ import os
 import discord
 from dotenv import load_dotenv
 from discord.ext import commands
+from time import sleep
 
 load_dotenv('token.env')  # Load environment variables from TOKEN.env file
 TOKEN = os.getenv('TOKEN')
@@ -13,6 +14,16 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 
+#
+# Functions
+#
+
+
+#
+# Bot events
+#
+
+# checking connection to server
 @bot.event
 async def on_ready():
     for guild in bot.guilds:
@@ -26,6 +37,7 @@ async def on_ready():
     )
 
 
+# reactions to messages
 @bot.event
 async def on_message(message):
     # Candice
@@ -36,12 +48,33 @@ async def on_message(message):
     if message.author.name == 'w12k':
         await message.channel.send('Jestes dupa')
 
+    # Wiktor kurwa chodz
+    if message.content == "Wiktor kurwa chodz":
+        username = "w12k"
+        guild = message.guild
+        member = discord.utils.find(lambda m: m.name == username, guild.members)
+        if member is not None:
+            mention = member.mention
+            for i in range(15):
+                await message.channel.send(f"{mention} kurwa chodz")
+                sleep(0.5)
     await bot.process_commands(message)
 
 
+#
+# Bot commands
+#
+
+# Lennyface
 @bot.command()
 async def lenny(ctx):
     await ctx.send("( ͡° ͜ʖ ͡°)")
 
 
+#
+# Music player
+#
+
+
+# Run KiraBot
 bot.run(TOKEN)
