@@ -1,5 +1,6 @@
 import os
 import discord
+from random import random
 from dotenv import load_dotenv
 from discord.ext import commands
 from time import sleep
@@ -47,6 +48,23 @@ async def on_message(message):
     # Wiktor
     if message.author.name == 'w12k':
         await message.channel.send('Jestes dupa')
+
+    # co ? > dupa
+    def randomowo():
+        liczba = random()
+
+        if liczba < 0.3:
+            return "dupa"
+        elif 0.3 < liczba < 0.6:
+            return "gowno"
+        else:
+            return "sranie"
+
+    if not message.content == "co":
+        if 'co ' in message.content:
+            await message.channel.send(randomowo())
+    else:
+        await message.channel.send(randomowo())
 
     # Wiktor kurwa chodz
     if message.content == "Wiktor kurwa chodz":
