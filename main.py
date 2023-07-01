@@ -7,7 +7,6 @@ from time import sleep
 
 load_dotenv('token.env')  # Load environment variables from TOKEN.env file
 TOKEN = os.getenv('TOKEN')
-GUILD = os.getenv('HYPIXEL FF')
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -29,7 +28,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 async def on_ready():
     global guild
     for guild in bot.guilds:
-        if guild.name == GUILD:
+        if guild.name == guild:
             break
 
     # Print bot connection
@@ -37,7 +36,14 @@ async def on_ready():
         f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
     )
+    # Check if commands are working
+    try:
+        synced = await bot.tree.sync()
+        print(f"Synced {synced} command(s)")
+    except Exception as error:
+        print(error)
 
+    print(f"Active discord members in {guild}:")
     for member in guild.members:
         print(member.name)
 
@@ -81,7 +87,6 @@ async def on_message(message):
                 await message.channel.send(f"{mention} kurwa chodz")
                 sleep(0.5)
 
-
     await bot.process_commands(message)
 
 
@@ -90,9 +95,9 @@ async def on_message(message):
 #
 
 # Lennyface
-@bot.command()
-async def lenny(ctx):
-    await ctx.send("( ͡° ͜ʖ ͡°)")
+@bot.tree.command(name="lenny")
+async def hello(interaction: discord.Interaction):
+    await interaction.response.send_message(f"Hey {interaction.user.mention} here is your ( ͡° ͜ʖ ͡°)", ephemeral=True)
 
 
 #
