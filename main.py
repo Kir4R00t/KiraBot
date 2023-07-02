@@ -1,6 +1,6 @@
 import os
 import discord
-from random import random
+import random
 from dotenv import load_dotenv
 from discord.ext import commands
 from time import sleep
@@ -46,17 +46,13 @@ async def on_ready():
 # reactions to messages
 @bot.event
 async def on_message(message):
-    # Candice
-    if message.content == 'Hey KiraBot do you know candice ?':
-        await message.channel.send('YOUR MOTHER HUNG HERSELF 🔥🔥💀💀')
-
     # Wiktor
     if message.author.name == 'w12k':
         await message.channel.send('Jestes dupa')
 
     # co ? > dupa
     def randomowo():
-        liczba = random()
+        liczba = random.random()
 
         if liczba < 0.3:
             return "dupa"
@@ -72,7 +68,7 @@ async def on_message(message):
         await message.channel.send(randomowo())
 
     # Wiktor kurwa chodz
-    if message.content == "Wiktor kurwa chodz":
+    if message.content == "Wiktor kurwa chodz" and message.author != "w12k":
         username = "w12k"
         guild = message.guild
         member = discord.utils.find(lambda m: m.name == username, guild.members)
@@ -97,12 +93,22 @@ async def hello(interaction: discord.Interaction):
 
 @bot.tree.command(name="ping", description="Display KiraBot's latency")
 async def ping(interaction: discord.Interaction):
-    await interaction.response.send_message(f'My Ping is {round(bot.latency * 1000)}ms')
+    await interaction.response.send_message(f'My Ping is {round(bot.latency * 1000)}ms', ephemeral=True)
 
 
-#
-# Music player
-#
+@bot.tree.command(name="coinflip", description="Flip a coin")
+async def coinflip(interaction: discord.Interaction):
+    coin = random.randint(1, 2)
+    if coin == 1:
+        await interaction.response.send_message("Heads", ephemeral=True)
+    else:
+        await interaction.response.send_message("Tails", ephemeral=True)
+
+
+@bot.tree.command(name="rtd", description="Roll the dice")
+async def coinflip(interaction: discord.Interaction):
+    dice = random.randint(1, 6)
+    await interaction.response.send_message(f"You have rolled {dice}", ephemeral=True)
 
 
 # Run KiraBot
