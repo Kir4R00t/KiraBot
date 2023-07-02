@@ -15,11 +15,6 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 
 #
-# Functions
-#
-
-
-#
 # Bot events
 #
 
@@ -95,9 +90,14 @@ async def on_message(message):
 #
 
 # Lennyface
-@bot.tree.command(name="lenny")
+@bot.tree.command(name="lenny", description="( ͡° ͜ʖ ͡°)")
 async def hello(interaction: discord.Interaction):
     await interaction.response.send_message(f"Hey {interaction.user.mention} here is your ( ͡° ͜ʖ ͡°)", ephemeral=True)
+
+
+@bot.tree.command(name="ping", description="Display KiraBot's latency")
+async def ping(interaction: discord.Interaction):
+    await interaction.response.send_message(f'My Ping is {round(bot.latency * 1000)}ms')
 
 
 #
