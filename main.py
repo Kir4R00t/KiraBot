@@ -28,12 +28,12 @@ async def on_ready():
         if guild.name == guild:
             break
 
-    # Print bot connection
+    # Bot connection info
     print(
         f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
     )
-    # Check if commands are working
+    # Commands sync
     try:
         synced = await bot.tree.sync()
         print(f"Synced {synced} command(s)")
@@ -93,11 +93,13 @@ async def hello(interaction: discord.Interaction):
     await interaction.response.send_message(f"Hey {interaction.user.mention} here is your ( ͡° ͜ʖ ͡°)", ephemeral=True)
 
 
-@bot.tree.command(name="ping", description="Display KiraBot's latency")
+# Ping
+@bot.tree.command(name="ping", description="Pong!")
 async def ping(interaction: discord.Interaction):
-    await interaction.response.send_message(f'My Ping is {round(bot.latency * 1000)}ms', ephemeral=True)
+    await interaction.response.send_message("pong!", ephemeral=True)
 
 
+# Coinflip
 @bot.tree.command(name="coinflip", description="Flip a coin")
 async def coinflip(interaction: discord.Interaction):
     coin = random.randint(1, 2)
@@ -107,6 +109,7 @@ async def coinflip(interaction: discord.Interaction):
         await interaction.response.send_message("Tails", ephemeral=True)
 
 
+# RTD
 @bot.tree.command(name="rtd", description="Roll the dice")
 async def coinflip(interaction: discord.Interaction):
     dice = random.randint(1, 6)
@@ -114,7 +117,7 @@ async def coinflip(interaction: discord.Interaction):
 
 
 #
-# TEST COMMAND
+# TEST COMMANDS
 #
 
 @bot.tree.command(name="test", description="test command")
