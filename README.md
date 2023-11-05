@@ -3,7 +3,7 @@ A simple discord bot written in python
 
 <p><i>(with purpose of playing around :P) </i></p>
 
-<h3>Featured commands: </h3>
+### Featured commands:
 <ul>
     <li><b>Lennyface</b> - speaks for itself ( ͡° ͜ʖ ͡°)</li>
     <li><b>Ping</b> - Pong!</li>
