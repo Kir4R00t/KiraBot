@@ -126,7 +126,7 @@ async def test(interaction: discord.Interaction):
 
 
 #
-# MUSIC PLAYER
+# MUSIC PLAYER (shit is not working currently)
 #
 
 @bot.tree.command(name="play", description="Play music from youtube !")
