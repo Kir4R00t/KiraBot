@@ -45,7 +45,7 @@ async def on_ready():
 
 
 #
-# Misc bot commands
+# Bot commands
 #
 
 
