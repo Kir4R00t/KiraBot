@@ -17,10 +17,9 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 
 #
-# Bot events
+# Connection & commands sync
 #
 
-# checking connection to server
 @bot.event
 async def on_ready():
     global guild
@@ -45,47 +44,10 @@ async def on_ready():
         print(member.name)
 
 
-# reactions to messages
-@bot.event
-async def on_message(message):
-    # Wiktor
-    if message.author.name == 'w12k':
-        await message.channel.send('Jestes dupa')
-
-    # co ? > dupa
-    def randomowo():
-        liczba = random.random()
-
-        if liczba < 0.3:
-            return "dupa"
-        elif 0.3 < liczba < 0.6:
-            return "gowno"
-        else:
-            return "sranie"
-
-    if not message.content == "co":
-        if 'co ' in message.content:
-            await message.channel.send(randomowo())
-    else:
-        await message.channel.send(randomowo())
-
-    # Wiktor kurwa chodz
-    if message.content == "Wiktor kurwa chodz" and message.author != "w12k":
-        username = "w12k"
-        guild = message.guild
-        member = discord.utils.find(lambda m: m.name == username, guild.members)
-        if member is not None:
-            mention = member.mention
-            for i in range(15):
-                await message.channel.send(f"{mention} kurwa chodz")
-                sleep(0.5)
-
-    await bot.process_commands(message)
-
-
 #
-# Bot commands
+# Misc bot commands
 #
+
 
 # Lennyface
 @bot.tree.command(name="lenny", description="( ͡° ͜ʖ ͡°)")
@@ -116,15 +78,13 @@ async def coinflip(interaction: discord.Interaction):
     await interaction.response.send_message(f"You have rolled {dice}", ephemeral=True)
 
 
-#
-# TEST COMMANDS
-#
-
+# TEST
 @bot.tree.command(name="test", description="test command")
 async def test(interaction: discord.Interaction):
     await interaction.response.send_message(f"you are on server {guild}")
 
 
+'''
 #
 # MUSIC PLAYER (shit is not working currently)
 #
@@ -157,7 +117,7 @@ async def stop(interaction: discord.Interaction):
         await voice_client.disconnect(force=True)
     else:
         await interaction.response.send_message("KiraB0t is not playing music rn bruh", ephemeral=True)
-
+'''
 
 # Run KiraBot
 bot.run(TOKEN)
