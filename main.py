@@ -2,7 +2,7 @@ import os
 import discord
 import random
 import interactions
-import yt_dlp
+import requests
 from dotenv import load_dotenv
 from discord.ext import commands
 from time import sleep
@@ -84,40 +84,19 @@ async def test(interaction: discord.Interaction):
     await interaction.response.send_message(f"you are on server {guild}")
 
 
-'''
-#
-# MUSIC PLAYER (shit is not working currently)
-#
+# GeoIP TODO: Add API error handling
+@bot.tree.command(name="whois", description="Get info about given IP")
+async def whois(interaction: discord.Interaction, ip: str):
+    url = f"http://ip-api.com/json/{ip}"
+    response = requests.get(url)
+    data = response.json()
 
-@bot.tree.command(name="play", description="Play music from youtube !")
-async def play(url):
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-    }
+    country = data['country']
+    city = data['city']
+    region = data['region']
+    isp = data['isp']
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=False)
-        url2 = info['url']
-
-    voice_channel = ctx.author.voice.channel
-    voice_client = await voice_channel.connect()
-    voice_client.play(discord.FFmpegPCMAudio(url2, options="-ar 48000"))
-
-
-@bot.tree.command(name="stop", description="Stop the music player")
-async def stop(interaction: discord.Interaction):
-    voice_client = interaction.guild.voice_client
-    if voice_client and voice_client.is_playing():
-        voice_client.stop()
-        await voice_client.disconnect(force=True)
-    else:
-        await interaction.response.send_message("KiraB0t is not playing music rn bruh", ephemeral=True)
-'''
+    await interaction.response.send_message(f'Country: {country} ||| ' f'Region: {region} ||| ' f'City: {city} ||| ' f'ISP: {isp} ||| ', ephemeral=True)
 
 # Run KiraBot
 bot.run(TOKEN)
