@@ -1,4 +1,4 @@
-# DiscordBot
+# KiraB0tt
 
-A simple bot written in python 
-(with no specific purpose)
+A simple discord bot written in python 
+(with purpose of playing around :P)
