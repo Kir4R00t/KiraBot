@@ -1,6 +1,8 @@
 import os
 import discord
 import random
+import interactions
+import yt_dlp
 from dotenv import load_dotenv
 from discord.ext import commands
 from time import sleep
@@ -109,6 +111,49 @@ async def coinflip(interaction: discord.Interaction):
 async def coinflip(interaction: discord.Interaction):
     dice = random.randint(1, 6)
     await interaction.response.send_message(f"You have rolled {dice}", ephemeral=True)
+
+
+#
+# TEST COMMAND
+#
+
+@bot.tree.command(name="test", description="test command")
+async def test(interaction: discord.Interaction):
+    await interaction.response.send_message(f"you are on server {guild}")
+
+
+#
+# MUSIC PLAYER
+#
+
+@bot.tree.command(name="play", description="Play music from youtube !")
+async def play(url):
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(url, download=False)
+        url2 = info['url']
+
+    voice_channel = ctx.author.voice.channel
+    voice_client = await voice_channel.connect()
+    voice_client.play(discord.FFmpegPCMAudio(url2, options="-ar 48000"))
+
+
+@bot.tree.command(name="stop", description="Stop the music player")
+async def stop(interaction: discord.Interaction):
+    voice_client = interaction.guild.voice_client
+    if voice_client and voice_client.is_playing():
+        voice_client.stop()
+        await voice_client.disconnect(force=True)
+    else:
+        await interaction.response.send_message("KiraB0t is not playing music rn bruh", ephemeral=True)
 
 
 # Run KiraBot
