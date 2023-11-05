@@ -96,7 +96,7 @@ async def whois(interaction: discord.Interaction, ip: str):
     region = data['region']
     isp = data['isp']
 
-    await interaction.response.send_message(f'Country: {country} ||| ' f'Region: {region} ||| ' f'City: {city} ||| ' f'ISP: {isp} ||| ', ephemeral=True)
+    await interaction.response.send_message(f'Country: {country}  |  ' f'Region: {region}  |  ' f'City: {city}  |  ' f'ISP: {isp}  |  ', ephemeral=True)
 
 # Run KiraBot
 bot.run(TOKEN)
