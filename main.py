@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from discord.ext import commands
 from time import sleep
 
-load_dotenv('token.env')  # Load environment variables from TOKEN.env file
+load_dotenv('token.env')
 TOKEN = os.getenv('TOKEN')
 
 intents = discord.Intents.default()
