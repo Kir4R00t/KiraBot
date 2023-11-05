@@ -1,5 +1,4 @@
 # KiraBot
-
 <p>A simple discord bot written in python <i>(in development phase)</i> </p>
 <p><i>(with purpose of playing around :P) </i></p>
 
