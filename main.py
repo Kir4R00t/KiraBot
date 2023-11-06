@@ -35,13 +35,14 @@ async def on_ready():
     # Commands sync
     try:
         synced = await bot.tree.sync()
-        print(f"Synced {synced} command(s)")
+        for x in synced:
+            print(f'{x}\n')
     except Exception as error:
         print(error)
 
     print(f"Active discord members in {guild}:")
     for member in guild.members:
-        print(member.name)
+        print(f'{member.name}\n')
 
 
 #
@@ -117,7 +118,7 @@ async def weather(interacion: discord.Interaction, city: str):
         else:
             wind_speed = "No wind data"
     else:
-        await interacion.response.send_message(f'Error: {response.status_code}', ephemeral=True)
+        await interacion.response.send_message(f'Error: no data for {city}', ephemeral=True)
 
     await interacion.response.send_message(f'Weather data for {city}  >>> | 'f'Temperature: {temperature}°C  |  ' f'Humidity: {humidy}%  |  ' f'Wind speed: {wind_speed}m/s  ', ephemeral=True)
 
