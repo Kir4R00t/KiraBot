@@ -10,5 +10,6 @@ _(with purpose of playing around :P)_
 - Coinflip - heads or tails ?
 - RTD - rolling the classic 6 number dice
 - GeoIP - displaying some basic info about given IP
+- Weather - displaying current weather in given city
 
 _currently in development phase_

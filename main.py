@@ -8,7 +8,7 @@ from discord.ext import commands
 from time import sleep
 
 load_dotenv('token.env')
-TOKEN = os.getenv('TOKEN')
+BOT_TOKEN = os.getenv('DISCORD')
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -93,10 +93,33 @@ async def whois(interaction: discord.Interaction, ip: str):
 
     country = data['country']
     city = data['city']
-    region = data['region']
     isp = data['isp']
 
     await interaction.response.send_message(f'Country: {country}  |  ' f'City: {city}  |  ' f'ISP: {isp}  |  ', ephemeral=True)
 
+
+# Weather
+@bot.tree.command(name="weather", description="Get weather info about given city")
+async def weather(interacion: discord.Interaction, city: str):
+    load_dotenv('token.env')
+    api_key = os.getenv('OPENWEATHER')
+
+    url = f'https://api.openweathermap.org/data/2.5/weather?&q={city}&units=metric&appid=' + api_key
+
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        temperature = data['main']['temp']
+        humidy = data['main']['humidity']
+
+        if 'wind' in data:
+            wind_speed = data['wind']['speed']
+        else:
+            wind_speed = "No wind data"
+    else:
+        await interacion.response.send_message(f'Error: {response.status_code}', ephemeral=True)
+
+    await interacion.response.send_message(f'Weather data for {city}  >>> | 'f'Temperature: {temperature}°C  |  ' f'Humidity: {humidy}%  |  ' f'Wind speed: {wind_speed}m/s  ', ephemeral=True)
+
 # Run KiraBot
-bot.run(TOKEN)
+bot.run(BOT_TOKEN)
