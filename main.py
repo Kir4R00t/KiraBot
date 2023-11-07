@@ -85,7 +85,7 @@ async def test(interaction: discord.Interaction):
     await interaction.response.send_message(f"you are on server {guild}")
 
 
-# GeoIP TODO: Add API error handling
+# GeoIP
 @bot.tree.command(name="whois", description="Get info about given IP")
 async def whois(interaction: discord.Interaction, ip: str):
     url = f"http://ip-api.com/json/{ip}"
