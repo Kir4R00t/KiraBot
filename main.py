@@ -90,14 +90,17 @@ async def test(interaction: discord.Interaction):
 async def whois(interaction: discord.Interaction, ip: str):
     url = f"http://ip-api.com/json/{ip}"
     response = requests.get(url)
-    data = response.json()
+    
+    if response.status_code == 200:
+        data = response.json()
 
-    country = data['country']
-    city = data['city']
-    isp = data['isp']
-
+        country = data['country']
+        city = data['city']
+        isp = data['isp']
+    else:
+        await interaction.response.send_message(f'Error: no data for {ip}', ephemeral=True)
+    
     await interaction.response.send_message(f'Country: {country}  |  ' f'City: {city}  |  ' f'ISP: {isp}  |  ', ephemeral=True)
-
 
 # Weather
 @bot.tree.command(name="weather", description="Get weather info about given city")
