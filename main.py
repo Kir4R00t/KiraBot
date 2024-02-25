@@ -100,8 +100,10 @@ async def whois(interaction: discord.Interaction, ip: str):
     city = data['city']
     isp = data['isp']
 
-    await interaction.response.send_message(f'Country: {country}  |  ' f'City: {city}  |  ' f'ISP: {isp}  |  ', ephemeral=True)
-
+    try:
+        await interaction.response.send_message(f'Country: {country}  |  ' f'City: {city}  |  ' f'ISP: {isp}  |  ', ephemeral=True)
+    except:
+        await interaction.response.send_message(f'API Error', ephemeral=True)
 
 # Weather
 @bot.tree.command(name="weather", description="Get weather info about given city")
