@@ -39,7 +39,7 @@ async def on_ready():
         for x in synced:
             print(f'{x}\n')
         if synced is None:
-            print("Error: No commands synced !")
+            print(f'{x} is not synced\n')
 
     except Exception as error:
         print(error)
@@ -89,7 +89,7 @@ async def test(interaction: discord.Interaction):
     await interaction.response.send_message(f"you are on server {guild}")
 
 
-# GeoIP TODO: Add API error handling
+# GeoIP TODO: Add proper API error handling
 @bot.tree.command(name="whois", description="Get info about given IP")
 async def whois(interaction: discord.Interaction, ip: str):
     url = f"http://ip-api.com/json/{ip}"
@@ -101,9 +101,11 @@ async def whois(interaction: discord.Interaction, ip: str):
     isp = data['isp']
 
     try:
-        await interaction.response.send_message(f'Country: {country}  |  ' f'City: {city}  |  ' f'ISP: {isp}  |  ', ephemeral=True)
+        await interaction.response.send_message(f'Country: {country}  |  ' f'City: {city}  |  ' f'ISP: {isp}  |  ',
+                                                ephemeral=True)
     except:
         await interaction.response.send_message(f'API Error', ephemeral=True)
+
 
 # Weather
 @bot.tree.command(name="weather", description="Get weather info about given city")
@@ -126,7 +128,10 @@ async def weather(interacion: discord.Interaction, city: str):
     else:
         await interacion.response.send_message(f'Error: no data for {city}', ephemeral=True)
 
-    await interacion.response.send_message(f'Weather data for {city}  >>> | 'f'Temperature: {temperature}°C  |  ' f'Humidity: {humidy}%  |  ' f'Wind speed: {wind_speed}m/s  ', ephemeral=True)
+    await interacion.response.send_message(
+        f'Weather data for {city}  >>> | 'f'Temperature: {temperature}°C  |  ' f'Humidity: {humidy}%  |  ' f'Wind speed: {wind_speed}m/s  ',
+        ephemeral=True)
+
 
 # Run KiraBot
 bot.run(BOT_TOKEN)
