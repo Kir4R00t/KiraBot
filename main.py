@@ -57,13 +57,13 @@ async def on_ready():
 # Lennyface
 @bot.tree.command(name="lenny", description="( ͡° ͜ʖ ͡°)")
 async def hello(interaction: discord.Interaction):
-    await interaction.response.send_message(f"Hey {interaction.user.mention} here is your ( ͡° ͜ʖ ͡°)", ephemeral=True)
+    await interaction.response.send_message(f"Hey {interaction.user.mention} here is your ( ͡° ͜ʖ ͡°)", ephemeral=False)
 
 
 # Ping
 @bot.tree.command(name="ping", description="Pong!")
 async def ping(interaction: discord.Interaction):
-    await interaction.response.send_message("pong!", ephemeral=True)
+    await interaction.response.send_message("pong!", ephemeral=False)
 
 
 # Coinflip
@@ -71,16 +71,16 @@ async def ping(interaction: discord.Interaction):
 async def coinflip(interaction: discord.Interaction):
     coin = random.randint(1, 2)
     if coin == 1:
-        await interaction.response.send_message("Heads", ephemeral=True)
+        await interaction.response.send_message("Heads", ephemeral=False)
     else:
-        await interaction.response.send_message("Tails", ephemeral=True)
+        await interaction.response.send_message("Tails", ephemeral=False)
 
 
 # RTD
 @bot.tree.command(name="rtd", description="Roll the dice")
 async def coinflip(interaction: discord.Interaction):
     dice = random.randint(1, 6)
-    await interaction.response.send_message(f"You have rolled {dice}", ephemeral=True)
+    await interaction.response.send_message(f"You have rolled {dice}", ephemeral=False)
 
 
 # TEST
@@ -102,9 +102,9 @@ async def whois(interaction: discord.Interaction, ip: str):
 
     try:
         await interaction.response.send_message(f'Country: {country}  |  ' f'City: {city}  |  ' f'ISP: {isp}  |  ',
-                                                ephemeral=True)
+                                                ephemeral=False)
     except:
-        await interaction.response.send_message(f'API Error', ephemeral=True)
+        await interaction.response.send_message(f'API Error', ephemeral=False)
 
 
 # Weather
@@ -126,11 +126,11 @@ async def weather(interacion: discord.Interaction, city: str):
         else:
             wind_speed = "No wind data"
     else:
-        await interacion.response.send_message(f'Error: no data for {city}', ephemeral=True)
+        await interacion.response.send_message(f'Error: no data for {city}', ephemeral=False)
 
     await interacion.response.send_message(
         f'Weather data for {city}  >>> | 'f'Temperature: {temperature}°C  |  ' f'Humidity: {humidy}%  |  ' f'Wind speed: {wind_speed}m/s  ',
-        ephemeral=True)
+        ephemeral=False)
 
 
 # Run KiraBot
