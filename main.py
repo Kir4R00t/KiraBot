@@ -50,6 +50,18 @@ async def on_ready():
 
 
 #
+# Bot reactions
+#
+@bot.event
+async def on_message(message):
+    # Check if author is the bot itself
+    # ...
+
+    if 'co' in message.content.lower():
+        await message.channel.send("Gówno.")
+
+
+#
 # Bot commands
 #
 
