@@ -101,8 +101,9 @@ async def whois(interaction: discord.Interaction, ip: str):
     isp = data['isp']
 
     try:
-        await interaction.response.send_message(f'Country: {country}  |  ' f'City: {city}  |  ' f'ISP: {isp}  |  ',
-                                                ephemeral=False)
+        await interaction.response.send_message(
+            f' >>> ** Country: {country}  |  ' f'City: {city}  |  ' f'ISP: {isp} ** ',
+            ephemeral=False)
     except:
         await interaction.response.send_message(f'API Error', ephemeral=False)
 
@@ -129,7 +130,7 @@ async def weather(interacion: discord.Interaction, city: str):
         await interacion.response.send_message(f'Error: no data for {city}', ephemeral=False)
 
     await interacion.response.send_message(
-        f'Weather data for {city}  >>> | 'f'Temperature: {temperature}°C  |  ' f'Humidity: {humidy}%  |  ' f'Wind speed: {wind_speed}m/s  ',
+        f'Weather data for {city}  >>> ** Temperature: {temperature}°C  | Humidity: {humidy}%  | Wind speed: {wind_speed}m/s  **',
         ephemeral=False)
 
 
