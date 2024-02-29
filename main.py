@@ -60,7 +60,6 @@ async def on_message(message):
     if message.content.lower() == 'what':
         await message.channel.send("Gówno.")
 
-
 #
 # Bot commands
 #
@@ -144,8 +143,6 @@ async def weather(interacion: discord.Interaction, city: str):
     await interacion.response.send_message(
         f'Weather data for {city}  >>> ** Temperature: {temperature}°C  | Humidity: {humidy}%  | Wind speed: {wind_speed}m/s  **',
         ephemeral=False)
-
-# Cat API
 
 
 # Run KiraBot
