@@ -146,8 +146,8 @@ async def weather(interacion: discord.Interaction, city: str):
 
 
 # CATSSS
-@bot.tree.command(name="kitty", description="Get a random image of a cat :3")
-async def kitty(interaction: discord.Interaction):
+@bot.tree.command(name="gibcat", description="Get a random image of a cat :3")
+async def gibcat(interaction: discord.Interaction):
     load_dotenv('token.env')
     api_key = os.getenv('CAT_API')
     url = f"https://api.thecatapi.com/v1/images/search?&api_key={api_key}"
