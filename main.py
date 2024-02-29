@@ -60,6 +60,7 @@ async def on_message(message):
     if message.content.lower() == 'what':
         await message.channel.send("Gówno.")
 
+
 #
 # Bot commands
 #
@@ -124,10 +125,9 @@ async def whois(interaction: discord.Interaction, ip: str):
 async def weather(interacion: discord.Interaction, city: str):
     load_dotenv('token.env')
     api_key = os.getenv('OPENWEATHER')
-
-    url = f'https://api.openweathermap.org/data/2.5/weather?&q={city}&units=metric&appid=' + api_key
-
+    url = f'https://api.openweathermap.org/data/2.5/weather?&q={city}&units=metric&appid={api_key}'
     response = requests.get(url)
+
     if response.status_code == 200:
         data = response.json()
         temperature = data['main']['temp']
@@ -143,6 +143,24 @@ async def weather(interacion: discord.Interaction, city: str):
     await interacion.response.send_message(
         f'Weather data for {city}  >>> ** Temperature: {temperature}°C  | Humidity: {humidy}%  | Wind speed: {wind_speed}m/s  **',
         ephemeral=False)
+
+
+# CATSSS
+@bot.tree.command(name="kitty", description="Get a random image of a cat :3")
+async def kitty(interaction: discord.Interaction):
+    load_dotenv('token.env')
+    api_key = os.getenv('CAT_API')
+    url = f"https://api.thecatapi.com/v1/images/search?&api_key={api_key}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        if data:
+            await interaction.response.send_message((data[0]['url']), ephemeral=False)
+        else:
+            await interaction.response.send_message("No data from API", ephemeral=False)
+    else:
+        await interaction.response.send_message("API ERROR", ephemeral=False)
 
 
 # Run KiraBot
