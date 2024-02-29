@@ -138,7 +138,7 @@ async def weather(interacion: discord.Interaction, city: str):
         else:
             wind_speed = "No wind data"
     else:
-        await interacion.response.send_message(f'Error: no data for {city}', ephemeral=False)
+        await interacion.response.send_message(f"API ERROR: {response.status_code}", ephemeral=False)
 
     await interacion.response.send_message(
         f'Weather data for {city}  >>> ** Temperature: {temperature}°C  | Humidity: {humidy}%  | Wind speed: {wind_speed}m/s  **',
@@ -160,7 +160,7 @@ async def kitty(interaction: discord.Interaction):
         else:
             await interaction.response.send_message("No data from API", ephemeral=False)
     else:
-        await interaction.response.send_message("API ERROR", ephemeral=False)
+        await interaction.response.send_message(f"API ERROR: {response.status_code}", ephemeral=False)
 
 
 # Run KiraBot
