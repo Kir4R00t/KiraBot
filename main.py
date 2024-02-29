@@ -55,10 +55,9 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    # Check if author is the bot itself
-    # ...
-
-    if 'co' in message.content.lower():
+    if message.content.lower() == 'co':
+        await message.channel.send("Gówno.")
+    if message.content.lower() == 'what':
         await message.channel.send("Gówno.")
 
 
@@ -145,6 +144,8 @@ async def weather(interacion: discord.Interaction, city: str):
     await interacion.response.send_message(
         f'Weather data for {city}  >>> ** Temperature: {temperature}°C  | Humidity: {humidy}%  | Wind speed: {wind_speed}m/s  **',
         ephemeral=False)
+
+# Cat API
 
 
 # Run KiraBot
