@@ -1,7 +1,7 @@
 # KiraBot
 A simple discord bot written in python
 
-_(with purpose of playing around :P)_
+_(with purpose of playing around with my friends on our server :v)_
 
 ### Featured commands:
 
