@@ -22,6 +22,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
 async def on_ready():
+    # Main bot guild (which is a serer of two ppl :v)
     global guild
     for guild in bot.guilds:
         if guild.name == guild:
