@@ -155,8 +155,9 @@ async def gibcat(interaction: discord.Interaction):
 
     if response.status_code == 200:
         data = response.json()
+        cat_photo_url = (data[0]['url'])
         if data:
-            await interaction.response.send_message((data[0]['url']), ephemeral=False)
+            await interaction.response.send_message(cat_photo_url, ephemeral=False)
         else:
             await interaction.response.send_message("No data from API", ephemeral=False)
     else:
