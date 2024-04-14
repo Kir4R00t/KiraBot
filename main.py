@@ -13,8 +13,8 @@ BOT_TOKEN = os.getenv('DISCORD')
 intents = discord.Intents.default()
 intents.message_content = True
 
+# This has no use for now basically
 bot = commands.Bot(command_prefix='!', intents=intents)
-
 
 #
 # Connection & Commands sync
@@ -54,6 +54,7 @@ async def on_ready():
 # Bot reactions
 #
 
+# Yeah I know I am a comedy master
 @bot.event
 async def on_message(message):
     if message.content.lower() == 'co':
