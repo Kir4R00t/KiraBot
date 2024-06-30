@@ -33,6 +33,7 @@ async def on_ready():
         f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
     )
+
     # Commands sync
     try:
         print("Synced commands: \n")
@@ -54,19 +55,22 @@ async def on_ready():
 # Bot reactions
 #
 
-# Yeah I know I am a comedy master
+# Yeah I know I am a comedy genius
 @bot.event
 async def on_message(message):
     if message.content.lower() == 'co':
         await message.channel.send("Gówno.")
     if message.content.lower() == 'what':
         await message.channel.send("Gówno.")
+    if message.author.name == 'w12k':
+        roll = random.randint(1, 10)
+        if roll == 3:
+            await message.channel.send("jestes dupa")
 
 
 #
 # Bot commands
 #
-
 
 # Lennyface
 @bot.tree.command(name="lenny", description="( ͡° ͜ʖ ͡°)")
