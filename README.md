@@ -12,5 +12,6 @@ _(with purpose of playing around with my friends on our server :v)_
 - GeoIP - displaying some basic info about given IP
 - Weather - displaying current weather in given city
 - Gibcat - get an image of a cute cat
+- Gta - get info about this weeks bonuses and discounts in GTA Online
 
 _currently in development phase_

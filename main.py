@@ -3,6 +3,8 @@ import discord
 import random
 import interactions
 import requests
+import requests
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from discord.ext import commands
 from time import sleep
@@ -15,6 +17,7 @@ intents.message_content = True
 
 # This has no use for now basically
 bot = commands.Bot(command_prefix='!', intents=intents)
+
 
 #
 # Connection & Commands sync
@@ -168,6 +171,54 @@ async def gibcat(interaction: discord.Interaction):
             await interaction.response.send_message("No data from API", ephemeral=False)
     else:
         await interaction.response.send_message(f"API ERROR: {response.status_code}", ephemeral=False)
+
+
+# GTA V Online data
+@bot.tree.command(name="gta", description="Get GTA V Online weekly update data")
+async def gta(interaction: discord.Interaction):
+    # Begin the scroop
+    url = "https://www.gtabase.com/grand-theft-auto-v/news/"
+    response = requests.get(url)
+    pre_soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Find update articles & Get latest update
+    updates_container = pre_soup.find('div', class_='com-content-category-blog__items')
+    latest_update = updates_container.find('div', class_='com-content-category-blog__item')
+
+    # Overwrite url with latest update
+    latest_update_link = latest_update.find('a', href=True)['href']
+    url = "https://www.gtabase.com" + latest_update_link
+    html_text = requests.get(url).text
+    soup = BeautifulSoup(html_text, 'lxml')
+
+    # that's for final content
+    content = {}
+
+    headers = soup.find_all('h2')
+    for header in headers:
+        section_title = header.get_text(strip=True)
+        section_content = []
+
+        # Parse data for each section (sibling = next header)
+        for sibling in header.find_next_siblings():
+            if sibling.name == 'h2':
+                break
+            if sibling.name == 'p':
+                section_content.append(sibling.get_text(strip=True))
+            if sibling.name == 'ul':
+                list_items = [li.get_text(strip=True) for li in sibling.find_all('li')]
+                section_content.extend(list_items)
+
+        # Put that into a neat dict
+        content[section_title] = "\n".join(section_content)
+
+    # Send the content as a message to the channel
+    message = ""
+    for title, data in content.items():
+        message_part = f"**{title}**\n{data}\n"
+        message += message_part + "\n"
+
+    await interaction.response.send_message(message, ephemeral=False)
 
 
 # Run KiraBot
