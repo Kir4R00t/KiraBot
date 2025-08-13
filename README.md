@@ -13,5 +13,7 @@ _(with purpose of playing around with my friends on our server :v)_
 - Weather - displaying current weather in given city
 - Gibcat - get an image of a cute cat
 - Gta - get info about this weeks bonuses and discounts in GTA Online
+- Trade - Issue a query to poe2 trade API
+- Show - Showoff your cool poe2 item in a neat embed
 
 _currently in development phase_

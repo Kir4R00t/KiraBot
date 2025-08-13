@@ -1,7 +1,8 @@
 import os
 import discord
 import random
-import interactions
+import json
+#import interactions
 import requests
 import requests
 from bs4 import BeautifulSoup
@@ -99,7 +100,7 @@ async def coinflip(interaction: discord.Interaction):
 
 # RTD
 @bot.tree.command(name="rtd", description="Roll the dice")
-async def coinflip(interaction: discord.Interaction):
+async def rtd(interaction: discord.Interaction):
     dice = random.randint(1, 6)
     await interaction.response.send_message(f"You have rolled {dice}", ephemeral=False)
 
@@ -220,6 +221,159 @@ async def gta(interaction: discord.Interaction):
 
     await interaction.response.send_message(message, ephemeral=False)
 
+@bot.tree.command(name="trade", description="Issue a query to poe2 trade API")
+async def trade(interaction: discord.Interaction, query: str): # , id: str
+    load_dotenv('token.env')
+    
+    # API endpoint
+    base_url = "https://www.pathofexile.com/api/trade2/"
+    search_url = base_url + "search/poe2/Standard"
+    fetch_url = base_url + "fetch/"
+    poe_session_id = os.getenv('POE_SESSION_ID')
+
+    # Headers
+    headers = {
+        'Content-Type': 'application/json',
+        'User-Agent': '5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+        'Cookie': f'POESESSID={poe_session_id}',
+        'Accept': '*/*',
+        'Connection': 'keep-alive'
+    }
+
+    # Parse query JSON & query ID
+    id = "youcanputwhateverinhere"
+    raw_query_json = query
+    query_id = id
+
+    try:
+        query = json.loads(raw_query_json)
+        query['id'] =  query_id
+
+    except json.JSONDecodeError as e:
+        print(f"Invalid JSON: {e}")
+        exit()
+
+    # Send search request
+    try:
+        response = requests.post(search_url, headers=headers, json=query)
+        print(f"Status Code: {response.status_code}")
+        if response.status_code == 200:
+            response_json = response.json()
+            print("Search successful. First few results:")
+            print(json.dumps(response_json.get("result", [])[:10], indent=2))
+        else:
+            print(f"Error Response: {response.text}")
+            exit()
+    except Exception as e:
+        print(f"Error sending search request: {e}")
+        exit()
+
+    # Fetch item details
+    result_ids = response_json.get("result", [])[:10]
+    if not result_ids:
+        print("No results found.")
+        exit()
+
+    result_ids_combined = ",".join(result_ids)
+    fetch_snippet = f"{result_ids_combined}?query={query_id}"
+    full_fetch_url = fetch_url + fetch_snippet
+
+    # Send fetch request
+    try:
+        response = requests.get(full_fetch_url, headers=headers)
+        print(f"Status Code: {response.status_code}")
+        if response.status_code == 200:
+            data = response.json()
+            print("Fetched item data:")
+            print(json.dumps(data, indent=2))
+        
+            embeds = []
+
+            for result in data['result']:
+                item = result.get("item", {})
+                listing = result.get("listing", {})
+                account = listing.get("account", {}).get("name", "Unknown")
+                price = listing.get("price", {})
+                mods = item.get("explicitMods", [])
+                enchant = item.get("enchantMods", [])
+                icon_url = item.get("icon")
+
+                # Create embed for this item
+                embed = discord.Embed(
+                    title=f"{item.get('name', '')} {item.get('typeLine', '')}",
+                    description=(
+                        f"**iLvl**: {item.get('ilvl')}\n"
+                        f"**League**: {item.get('league')}\n"
+                        f"**Corrupted**: {item.get('corrupted')}\n"
+                        f"**Note**: {item.get('note', 'N/A')}"
+                    ),
+                    color=discord.Color.gold()
+                )
+                embed.set_thumbnail(url=icon_url)
+                embed.set_footer(text=f"Seller: {account} | Price: {price.get('amount')} {price.get('currency')}")
+
+                if mods:
+                    embed.add_field(
+                        name="Explicit Mods",
+                        value="\n".join(f"- {mod}" for mod in mods),
+                        inline=False
+                    )
+
+                if enchant:
+                    embed.add_field(
+                        name="Enchant Mods",
+                        value="\n".join(f"- {mod}" for mod in enchant),
+                        inline=False
+                    )
+
+                embeds.append(embed)
+
+            # Send first embed using interaction.response
+            if embeds:
+                await interaction.response.send_message(embed=embeds[0], ephemeral=False)
+                
+                # Send the rest
+                '''for embed in embeds[1:]:
+                    await interaction.followup.send(embed=embed)'''
+            else:
+                await interaction.response.send_message("No items found.", ephemeral=True)
+
+
+            sleep(5)  # Avoid hammering the server
+        else:
+            print(f"Error Response: {response.text}")
+    except Exception as e:
+        print(f"Error fetching item data: {e}")
+
+@bot.tree.command(name="show", description="Showoff your item from poe2, mouse over your item in poe2 and ctrl + c to get the item data")
+async def show(interaction: discord.Interaction, item_data: str):
+
+    item_data = item_data.split('\n')
+    
+    for line in item_data:
+        if "Item Class" in line:
+            item_class = line
+        if "Rarity" in line:
+            item_rarity = line
+    
+    embed = discord.Embed(
+        title = "item_title",
+            description=(
+                'description'
+            ),
+        color=discord.Color.gold()
+    )
+
+    embed.add_field(
+        name='Item Stats:',
+        value='\n'.join(f'- {line}' for line in item_data),
+        inline=False
+    )
+    
+    try:
+        await interaction.response.send_message(embed=embed, ephemeral=False)
+    except Exception as e:
+        print(f'Exception: {e}')
 
 # Run KiraBot
 bot.run(BOT_TOKEN)
