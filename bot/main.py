@@ -2,9 +2,9 @@ import os
 import discord
 import random
 import json
-#import interactions
+import logging
 import requests
-import requests
+
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from discord.ext import commands
@@ -19,6 +19,7 @@ intents.message_content = True
 # This has no use for now basically
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+logger = logging.getLogger(__name__)
 
 #
 # Connection & Commands sync
@@ -33,26 +34,26 @@ async def on_ready():
             break
 
     # Bot connection info
-    print(
+    logger.info(
         f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
     )
 
     # Commands sync
     try:
-        print("Synced commands: \n")
+        logger.info("Synced commands: \n")
         synced = await bot.tree.sync()
         for x in synced:
-            print(f'{x}\n')
+            logger.info(f'{x}\n')
         if synced is None:
-            print(f'{x} is not synced\n')
+            logger.info(f'{x} is not synced\n')
 
     except Exception as error:
-        print(error)
+        logger.info(error)
 
-    print(f"Active discord members in {guild}:")
+    logger.info(f"Active discord members in {guild}:")
     for member in guild.members:
-        print(f'{member.name}\n')
+        logger.info(f'{member.name}\n')
 
 
 #
@@ -250,28 +251,28 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
         query['id'] =  query_id
 
     except json.JSONDecodeError as e:
-        print(f"Invalid JSON: {e}")
+        logger.info(f"Invalid JSON: {e}")
         exit()
 
     # Send search request
     try:
         response = requests.post(search_url, headers=headers, json=query)
-        print(f"Status Code: {response.status_code}")
+        logger.info(f"Status Code: {response.status_code}")
         if response.status_code == 200:
             response_json = response.json()
-            print("Search successful. First few results:")
-            print(json.dumps(response_json.get("result", [])[:10], indent=2))
+            logger.info("Search successful. First few results:")
+            logger.info(json.dumps(response_json.get("result", [])[:10], indent=2))
         else:
-            print(f"Error Response: {response.text}")
+            logger.info(f"Error Response: {response.text}")
             exit()
     except Exception as e:
-        print(f"Error sending search request: {e}")
+        logger.info(f"Error sending search request: {e}")
         exit()
 
     # Fetch item details
     result_ids = response_json.get("result", [])[:10]
     if not result_ids:
-        print("No results found.")
+        logger.info("No results found.")
         exit()
 
     result_ids_combined = ",".join(result_ids)
@@ -281,11 +282,11 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
     # Send fetch request
     try:
         response = requests.get(full_fetch_url, headers=headers)
-        print(f"Status Code: {response.status_code}")
+        logger.info(f"Status Code: {response.status_code}")
         if response.status_code == 200:
             data = response.json()
-            print("Fetched item data:")
-            print(json.dumps(data, indent=2))
+            logger.info("Fetched item data:")
+            logger.info(json.dumps(data, indent=2))
         
             embeds = []
 
@@ -341,9 +342,9 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
 
             sleep(5)  # Avoid hammering the server
         else:
-            print(f"Error Response: {response.text}")
+            logger.info(f"Error Response: {response.text}")
     except Exception as e:
-        print(f"Error fetching item data: {e}")
+        logger.info(f"Error fetching item data: {e}")
 
 @bot.tree.command(name="show", description="Showoff your item from poe2, mouse over your item in poe2 and ctrl + c to get the item data")
 async def show(interaction: discord.Interaction, item_data: str):
@@ -373,7 +374,7 @@ async def show(interaction: discord.Interaction, item_data: str):
     try:
         await interaction.response.send_message(embed=embed, ephemeral=False)
     except Exception as e:
-        print(f'Exception: {e}')
+        logger.info(f'Exception: {e}')
 
 # Run KiraBot
 bot.run(BOT_TOKEN)
