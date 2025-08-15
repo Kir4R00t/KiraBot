@@ -71,7 +71,8 @@ async def on_message(message):
         roll = random.randint(1, 10)
         if roll == 3:
             await message.channel.send("jestes dupa")
-
+    if bot.user.mentioned_in(message):
+        await message.channel.send(random.choice(['Tak.','Nie.']))
 
 #
 # Bot commands
